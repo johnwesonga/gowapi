@@ -17,11 +17,6 @@ type CountryLatLong struct {
 	State   string  `json:"state"`
 }
 
-type Weather []struct {
-	Main        string `json:"main"`
-	Description string `json:"description"`
-}
-
 const (
 	defaultBaseURL = "https://api.openweathermap.org/data/3.0/onecall"
 	geoCodingURL   = "http://api.openweathermap.org/geo/1.0/direct"

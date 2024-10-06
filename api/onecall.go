@@ -14,6 +14,10 @@ type Current struct {
 	WindSpeed float32 `json:"wind_speed"`
 	Weather   Weather `json:"weather"`
 }
+type Weather []struct {
+	Main        string `json:"main"`
+	Description string `json:"description"`
+}
 
 // get access to current weather, minute forecast for 1 hour, hourly forecast for 48 hours, daily forecast
 // for 8 days and government weather alerts,
