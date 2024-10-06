@@ -1,5 +1,7 @@
 package api
 
+import "fmt"
+
 type OneCallService struct {
 	client *Client
 }
@@ -36,11 +38,37 @@ type Daily []struct {
 
 // get access to current weather, minute forecast for 1 hour, hourly forecast for 48 hours, daily forecast
 // for 8 days and government weather alerts,
-func GetCurrentWeatherForLoc(lat, long float32) {
+func (svc *OneCallService) GetCurrentWeatherForLoc(lat, lon float32) (OneCallResponse, error) {
+	// https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&exclude={part}&appid={API key}
+	url := fmt.Sprintf("?lat=%f&lon=%f&exclude=minutely,alerts,daily", lat, lon)
+	req, err := svc.client.NewRequest("GET", url)
+	if err != nil {
+		return OneCallResponse{}, err
+	}
+	var oneCallResponse OneCallResponse
+	_, err = svc.client.Do(req, &oneCallResponse)
+	if err != nil {
+		return OneCallResponse{}, err
+	}
 
+	return oneCallResponse, nil
 }
 
 // function to to get weather overview with a human-readable weather summary
 // for today and tomorrow's forecast
-func GetWeatherOverview(lat, long float32) {
+func (svc *OneCallService) GetWeatherOverview(lat, lon float32) (OneCallResponse, error) {
+	//https://api.openweathermap.org/data/3.0/onecall/overview?lat={lat}&lon={lon}&appid={API key}
+	url := fmt.Sprintf("/overview?lat=%f&lon=%f", lat, lon)
+
+	req, err := svc.client.NewRequest("GET", url)
+	if err != nil {
+		return OneCallResponse{}, err
+	}
+	var oneCallResponse OneCallResponse
+	_, err = svc.client.Do(req, &oneCallResponse)
+	if err != nil {
+		return OneCallResponse{}, err
+	}
+
+	return oneCallResponse, nil
 }

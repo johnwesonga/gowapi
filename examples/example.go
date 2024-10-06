@@ -12,25 +12,37 @@ const (
 	mockURL      = "http://localhost:4444/geo"
 )
 
-func geoCodingExample() {
+func geoCodingExample() (lat, lon float32) {
 	client := api.NewClient(geoCodingURL)
-	geoCodingResp, err := client.GeoCodingSvc.GetGeoCordsByLocName("Nairobi", "KE")
+	geoCodingResp, err := client.GeoCodingSvc.GetGeoCordsByLocName("Concord", "USA")
 	if err != nil {
 		log.Fatal(err)
 	}
 	// Use geocoding response
 	if len(geoCodingResp) > 0 {
-		fmt.Printf("Lat: %v Lon: %v", geoCodingResp[0].Lat, geoCodingResp[0].Lon)
+		fmt.Printf("Lat: %v Lon: %v\n", geoCodingResp[0].Lat, geoCodingResp[0].Lon)
 	} else {
 		fmt.Println("No location found")
 	}
+	return geoCodingResp[0].Lat, geoCodingResp[0].Lon
 }
 
-func oneCallExample() {
+func oneCallExample(lat, lon float32) {
 	// do something
+	c := api.NewClient(oneCallURL)
+	weatherResp, err := c.OneCallSvc.GetCurrentWeatherForLoc(lat, lon)
+	if err != nil {
+		log.Fatal(err)
+	}
+	// use weather response
+	fmt.Printf("Current Temp: %v\nHumidity: %v\nWeather:%v",
+		weatherResp.Current.Temp,
+		weatherResp.Current.Humidity,
+		weatherResp.Current.Weather[0].Description)
+
 }
 
 func main() {
-	geoCodingExample()
-	oneCallExample()
+	lat, lon := geoCodingExample()
+	oneCallExample(lat, lon)
 }
