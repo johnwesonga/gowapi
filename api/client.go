@@ -18,6 +18,13 @@ type Client struct {
 	OneCallSvc   *OneCallService
 }
 
+type ErrorResponse struct {
+	Response   *http.Response `json:"-"`
+	Cod        int            `json:"cod"`
+	Message    string         `json:"message"`
+	Parameters []string       `json:"parameters,omitempty"`
+}
+
 func NewClient(defaultBaseURL string) *Client {
 	apiKey := os.Getenv("OPENWEATHER_API_KEY")
 	if apiKey == "" {
@@ -56,11 +63,40 @@ func (c *Client) Do(req *http.Request, v interface{}) (*http.Response, error) {
 		return nil, err
 	}
 
-	defer resp.Body.Close()
-	log.Printf("Received response with status: %s\n", resp.Status)
+	err = CheckResponse(resp)
+	if err != (nil) {
+		defer resp.Body.Close()
+		return nil, err
+	}
 
 	if v != nil {
 		err = json.NewDecoder(resp.Body).Decode(v)
 	}
 	return resp, err
+}
+
+func (r *ErrorResponse) Error() string {
+	return fmt.Sprintf("Error\nMessage: %v", r.Message)
+}
+
+// CheckResponse checks the API response for errors, and returns them if
+// present. A response is considered an error if it has a status code outside
+// the 200 range or equal to 202 Accepted.
+// API error responses are expected to have response
+// body, and a JSON response body that maps to ErrorResponse.
+func CheckResponse(r *http.Response) error {
+	if r.StatusCode == http.StatusAccepted {
+		return nil
+	}
+	if c := r.StatusCode; 200 <= c && c <= 299 {
+		return nil
+	}
+	errorResponse := &ErrorResponse{Response: r}
+
+	if err := json.NewDecoder(r.Body).Decode(errorResponse); err != nil {
+		return err
+	}
+
+	return errorResponse
+
 }
