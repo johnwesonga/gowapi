@@ -15,6 +15,7 @@ type Client struct {
 	defaultApiKey string
 	//Services
 	GeoCodingSvc *GeoCodingService
+	OneCallSvc   *OneCallService
 }
 
 func NewClient(defaultBaseURL string) *Client {
@@ -26,7 +27,8 @@ func NewClient(defaultBaseURL string) *Client {
 	c := &Client{
 		client:        http.DefaultClient,
 		BaseURL:       baseURL,
-		defaultApiKey: apiKey}
+		defaultApiKey: apiKey,
+	}
 	c.GeoCodingSvc = &GeoCodingService{client: c}
 	return c
 }
