@@ -12,21 +12,22 @@ const (
 	mockURL      = "http://localhost:4444/geo"
 )
 
-func geoCodingExample() (lat, lon float32) {
+func geoCodingExample() (lat, lon float32, err error) {
 	client := api.NewClient(geoCodingURL)
 	geoCodingResp, err := client.GeoCodingSvc.GetGeoCordsByLocName("Concord", "USA")
 	if err != nil {
 		log.Fatal(err)
+		return 0, 0, err
 	}
 	// Use geocoding response
 	if len(geoCodingResp) > 0 {
 		fmt.Printf("Lat: %v Lon: %v\n", geoCodingResp[0].Lat, geoCodingResp[0].Lon)
 	} else {
 		fmt.Println("No location found")
+		return 0, 0, fmt.Errorf("no location found")
 	}
-	return geoCodingResp[0].Lat, geoCodingResp[0].Lon
+	return geoCodingResp[0].Lat, geoCodingResp[0].Lon, nil
 }
-
 func oneCallExample(lat, lon float32) {
 	// do something
 	c := api.NewClient(oneCallURL)
@@ -43,6 +44,9 @@ func oneCallExample(lat, lon float32) {
 }
 
 func main() {
-	lat, lon := geoCodingExample()
+	lat, lon, err := geoCodingExample()
+	if err != nil {
+		log.Fatal(err)
+	}
 	oneCallExample(lat, lon)
 }
