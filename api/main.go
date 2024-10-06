@@ -17,17 +17,6 @@ type CountryLatLong struct {
 	State   string  `json:"state"`
 }
 
-type OneCallResponse struct {
-	Current Current `json:"current"`
-}
-
-type Current struct {
-	Temp      float32 `json:"temp"`
-	Humidity  int     `json:"humidity"`
-	WindSpeed float32 `json:"wind_speed"`
-	Weather   Weather `json:"weather"`
-}
-
 type Weather []struct {
 	Main        string `json:"main"`
 	Description string `json:"description"`
