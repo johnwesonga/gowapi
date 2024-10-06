@@ -30,6 +30,7 @@ func NewClient(defaultBaseURL string) *Client {
 		defaultApiKey: apiKey,
 	}
 	c.GeoCodingSvc = &GeoCodingService{client: c}
+	c.OneCallSvc = &OneCallService{client: c}
 	return c
 }
 

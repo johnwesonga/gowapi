@@ -8,11 +8,11 @@ import (
 
 const (
 	geoCodingURL = "https://api.openweathermap.org/geo/1.0/direct"
-	//geoCodingURL = "http://localhost:4444/geo"
+	oneCallURL   = "https://api.openweathermap.org/data/3.0/onecall"
+	mockURL      = "http://localhost:4444/geo"
 )
 
-func main() {
-
+func geoCodingExample() {
 	client := api.NewClient(geoCodingURL)
 	geoCodingResp, err := client.GeoCodingSvc.GetGeoCordsByLocName("Nairobi", "KE")
 	if err != nil {
@@ -24,5 +24,13 @@ func main() {
 	} else {
 		fmt.Println("No location found")
 	}
+}
 
+func oneCallExample() {
+	// do something
+}
+
+func main() {
+	geoCodingExample()
+	oneCallExample()
 }
