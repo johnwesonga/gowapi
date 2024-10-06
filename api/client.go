@@ -9,10 +9,6 @@ import (
 	"os"
 )
 
-const (
-// apiKey = "a7e55dec463f7d3ae474b3bad79a75fe"
-)
-
 type Client struct {
 	BaseURL       *url.URL
 	client        *http.Client
