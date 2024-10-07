@@ -67,6 +67,6 @@ func GetGeoCords(city, countryCode string) {
 		panic(err)
 	}
 
-	fmt.Printf("Lat: %v\n", geoCordCallResponse[0].Lat)
+	fmt.Printf("Lat: %v\nLon: %v\n", geoCordCallResponse[0].Lat, geoCordCallResponse[0].Lon)
 
 }

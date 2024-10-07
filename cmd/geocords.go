@@ -8,7 +8,7 @@ import (
 
 var geocordsCmd = &cobra.Command{
 	Use:   "geocords",
-	Short: "returns lat lon given a city",
+	Short: "returns lat,lon given a city",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		api.GetGeoCords(city, countryCode)
